@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Address2Map</name>
+    </assembly>
+    <members>
+        <member name="T:Address2Map.BusinessController.AddressBusinessController">
+            <summary>
+            Business logic of the address controller
+            </summary>
+        </member>
+        <member name="M:Address2Map.BusinessController.AddressBusinessController.ProcessText2Output(System.UInt32,System.String)">
+            <summary>
+            Convert text 2 output
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Address2Map.BusinessController.AddressBusinessController.ProcessLine(System.UInt32,System.String)">
+            <summary>
+            Process line in input with the processing rules
+            </summary>
+            <param name="city"></param>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Address2Map.Controllers.VersionController">
+            <summary>
+            Public version controller
+            </summary>
+        </member>
+        <member name="M:Address2Map.Controllers.VersionController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Address2Map.Repository.VersionRepository)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Address2Map.Controllers.VersionController.Get">
+            <summary>
+            Returns version of the current api
+            
+            For development purposes it returns version of assembly, for production purposes it returns string build by pipeline which contains project information, pipeline build version, assembly version, and build date
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Address2Map.Model.Street">
+            <summary>
+            Street
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Street.Code">
+            <summary>
+            Street code from rujan
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Street.Name">
+            <summary>
+            Street name
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Street.Slug">
+            <summary>
+            Clear text
+            </summary>
+        </member>
+        <member name="T:Address2Map.Model.Version">
+            <summary>
+            API version information
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.InstanceIdentifier">
+            <summary>
+            Instance identifier. Every application runtime has its own guid. If 3 pods are launched in kubernetes, it is possible to identify instance by this identifier
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.InstanceStartedAt">
+            <summary>
+            Last time when instance has been reset
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.ApplicationName">
+            <summary>
+            Application name
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.DockerImage">
+            <summary>
+            Full docker image with name and version
+            For example crm5g-service-settings:20211006.8
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.DockerImageVersion">
+            <summary>
+            Docker image version
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.BuildNumber">
+            <summary>
+            Build number from devops or github actions
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.DLLVersion">
+            <summary>
+            Application dll version
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.SourceVersion">
+            <summary>
+            Version of commit or changeset
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.BuildTime">
+            <summary>
+            Dll build time
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.Culture">
+            <summary>
+            Culture info
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.Version.Status">
+            <summary>
+            Status to validate functionality
+            </summary>
+        </member>
+        <member name="M:Address2Map.Repository.RuianRepository.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Address2Map.Repository.RuianRepository.ProcessCSV(System.Byte[])">
+            <summary>
+            Process single csv file of administrative unit points
+            </summary>
+            <param name="csv"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Address2Map.Repository.RuianRepository.SuggestStreet(System.UInt32,System.String)">
+            <summary>
+            Returns the same input if it was found
+            Returns corrected input if it was able to find alternative
+            Returns empty string if not found
+            
+            </summary>
+            <param name="city"></param>
+            <param name="street"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Address2Map.Repository.VersionRepository">
+            <summary>
+            Version repository
+            </summary>
+        </member>
+        <member name="M:Address2Map.Repository.VersionRepository.GetVersion(System.String,System.DateTimeOffset,System.String,System.String)">
+            <summary>
+            show current version
+            </summary>
+            <param name="instanceId"></param>
+            <param name="start"></param>
+            <param name="dllVersion"></param>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Address2Map.Startup">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Address2Map.Startup.InstanceId">
+            <summary>
+            Identifies specific run of the application
+            </summary>
+        </member>
+        <member name="F:Address2Map.Startup.Started">
+            <summary>
+            Identifies specific run of the application
+            </summary>
+        </member>
+    </members>
+</doc>
