@@ -23,6 +23,21 @@
             <param name="line"></param>
             <returns></returns>
         </member>
+        <member name="M:Address2Map.Controllers.AddressController.AutocompleteCity(System.String)">
+            <summary>
+            Autocomplete city
+            </summary>
+            <param name="cityName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Address2Map.Controllers.AddressController.AutocompleteStreet(System.UInt32,System.String)">
+            <summary>
+            Autocomplete street for specific city
+            </summary>
+            <param name="cityCode"></param>
+            <param name="cityName"></param>
+            <returns></returns>
+        </member>
         <member name="T:Address2Map.Controllers.VersionController">
             <summary>
             Public version controller

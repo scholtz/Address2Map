@@ -79,5 +79,15 @@ namespace Address2Map.BusinessController
 
             return (line, err);
         }
+
+        internal IEnumerable<Model.City> AutocompleteCity(string cityName)
+        {
+            return ruianRepository.AutocompleteCity(cityName);
+        }
+
+        internal IEnumerable<Street> AutocompleteStreet(uint cityCode, string streetName)
+        {
+            return ruianRepository.AutocompleteStreet(cityCode, streetName);
+        }
     }
 }

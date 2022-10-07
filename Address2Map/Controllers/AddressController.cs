@@ -1,3 +1,5 @@
+using Address2Map.BusinessController;
+using Address2Map.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Address2Map.Controllers
@@ -8,11 +10,52 @@ namespace Address2Map.Controllers
     {
 
         private readonly ILogger<AddressController> _logger;
-
-        public AddressController(ILogger<AddressController> logger)
+        private readonly AddressBusinessController addressBusinessController;
+        public AddressController(ILogger<AddressController> logger, AddressBusinessController addressBusinessController)
         {
             _logger = logger;
+            this.addressBusinessController = addressBusinessController;
         }
+        /// <summary>
+        /// Autocomplete city
+        /// </summary>
+        /// <param name="cityName"></param>
+        /// <returns></returns>
+        [HttpGet("AutocompleteCity/{cityName}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Model.City>))]
+        [ProducesResponseType(400)]
+        public ActionResult<IEnumerable<Model.City>> AutocompleteCity([FromRoute] string cityName)
+        {
+            try
+            {
+                return Ok(addressBusinessController.AutocompleteCity(cityName));
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
+            }
 
+        }
+        /// <summary>
+        /// Autocomplete street for specific city
+        /// </summary>
+        /// <param name="cityCode"></param>
+        /// <param name="cityName"></param>
+        /// <returns></returns>
+        [HttpGet("AutocompleteStreet/{cityCode}/{cityName}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Model.City>))]
+        [ProducesResponseType(400)]
+        public ActionResult<IEnumerable<Model.City>> AutocompleteStreet([FromRoute] uint cityCode, [FromRoute] string cityName)
+        {
+            try
+            {
+                return Ok(addressBusinessController.AutocompleteStreet(cityCode, cityName));
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
+            }
+
+        }
     }
 }

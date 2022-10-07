@@ -44,4 +44,9 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+
+var repo = app.Services.GetService<RuianRepository>();
+repo?.ProcessCSV(File.ReadAllBytes("Data/20220930_OB_554782_ADR.csv"));
+System.GC.Collect();
 app.Run();

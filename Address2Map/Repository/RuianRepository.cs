@@ -11,7 +11,7 @@ namespace Address2Map.Repository
     {
         ConcurrentDictionary<uint, City> cityCode2City = new ConcurrentDictionary<uint, City>();
         //ConcurrentDictionary<uint, Street> streetCode2Street = new ConcurrentDictionary<uint, Street>();
-        ConcurrentDictionary<uint, HashSet<Street>> cityCode2Streets = new ConcurrentDictionary<uint, HashSet<Street>>();
+        ConcurrentDictionary<uint, ConcurrentDictionary<uint, Street>> cityCode2Streets = new ConcurrentDictionary<uint, ConcurrentDictionary<uint, Street>>();
         private readonly SlugHelper slugHelper;
         /// <summary>
         /// Constructor
@@ -70,12 +70,12 @@ namespace Address2Map.Repository
                 var cityCode = uint.Parse(fields[ColCityCode]);
 
                 var streetCode = uint.Parse(fields[ColStreetCode]);
-                if (!cityCode2City.ContainsKey(cityCode)) cityCode2City[cityCode] = new City() { Code = cityCode, Name = fields[ColCityName] };
+                if (!cityCode2City.ContainsKey(cityCode)) cityCode2City[cityCode] = new City() { Code = cityCode, Name = fields[ColCityName], Slug = slugHelper.GenerateSlug(fields[ColCityName]) };
                 var street = new Street() { Code = streetCode, Name = fields[ColStreetName], Slug = slugHelper.GenerateSlug(fields[ColStreetName]) };
-                if (!cityCode2Streets.ContainsKey(cityCode)) cityCode2Streets[cityCode] = new HashSet<Street>();
-                if (!cityCode2Streets[cityCode].Contains(street))
+                if (!cityCode2Streets.ContainsKey(cityCode)) cityCode2Streets[cityCode] = new ConcurrentDictionary<uint, Street>();
+                if (!cityCode2Streets[cityCode].ContainsKey(streetCode))
                 {
-                    cityCode2Streets[cityCode].Add(street);
+                    cityCode2Streets[cityCode][streetCode] = street;
                     ret++;
                 }
             }
@@ -94,25 +94,38 @@ namespace Address2Map.Repository
         internal string? SuggestStreet(uint city, string street)
         {
             if (!cityCode2Streets.ContainsKey(city)) return null;
-            var findExact = cityCode2Streets[city].FirstOrDefault(i => i.Name == street);
+            var findExact = cityCode2Streets[city].Values.FirstOrDefault(i => i.Name == street);
             if (findExact != null)
             {
                 return street;
             }
             var slug = slugHelper.GenerateSlug(street);
-            var findSlug = cityCode2Streets[city].FirstOrDefault(i => i.Slug == slug);
+            var findSlug = cityCode2Streets[city].Values.FirstOrDefault(i => i.Slug == slug);
             if (findSlug != null)
             {
                 return findSlug.Name;
             }
             var slugNabrezi = $"{slug}ezi";
-            findSlug = cityCode2Streets[city].FirstOrDefault(i => i.Slug == slugNabrezi);
+            findSlug = cityCode2Streets[city].Values.FirstOrDefault(i => i.Slug == slugNabrezi);
             if (findSlug != null)
             {
                 return findSlug.Name;
             }
 
             return findSlug?.Name;
+        }
+
+        internal IEnumerable<City> AutocompleteCity(string cityName)
+        {
+            var slug = slugHelper.GenerateSlug(cityName);
+            return cityCode2City.Values.Where(c => c.Slug.StartsWith(slug)).OrderBy(k => k.Name);
+        }
+
+        internal IEnumerable<Street> AutocompleteStreet(uint cityCode, string streetName)
+        {
+            var slug = slugHelper.GenerateSlug(streetName);
+            if (!cityCode2Streets.ContainsKey(cityCode)) return Enumerable.Empty<Street>();
+            return cityCode2Streets[cityCode].Values.Where(c => c.Slug.StartsWith(streetName)).OrderBy(k=>k.Name);
         }
     }
 }
