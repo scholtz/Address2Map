@@ -40,16 +40,16 @@ namespace Address2Map.Controllers
         /// Autocomplete street for specific city
         /// </summary>
         /// <param name="cityCode"></param>
-        /// <param name="cityName"></param>
+        /// <param name="streetName"></param>
         /// <returns></returns>
-        [HttpGet("AutocompleteStreet/{cityCode}/{cityName}")]
+        [HttpGet("AutocompleteStreet/{cityCode}/{streetName}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Model.City>))]
         [ProducesResponseType(400)]
-        public ActionResult<IEnumerable<Model.City>> AutocompleteStreet([FromRoute] uint cityCode, [FromRoute] string cityName)
+        public ActionResult<IEnumerable<Model.City>> AutocompleteStreet([FromRoute] uint cityCode, [FromRoute] string streetName)
         {
             try
             {
-                return Ok(addressBusinessController.AutocompleteStreet(cityCode, cityName));
+                return Ok(addressBusinessController.AutocompleteStreet(cityCode, streetName));
             }
             catch (Exception exc)
             {
