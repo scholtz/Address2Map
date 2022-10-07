@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: address2map
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: address2map-web-deployment
+  namespace: address2map
+spec:
+  selector:
+    matchLabels:
+      app: address2map-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: address2map-app
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - name: address2map-app
+          image: scholtz2/address2map:1.0.0-stable
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 10
+            timeoutSeconds: 5  
+            failureThreshold: 2
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 20
+            timeoutSeconds: 5  
+            failureThreshold: 2
+            terminationGracePeriodSeconds: 1
+          #command: ["/bin/sh", "-ec", "while :; do date; sleep 60 ; done"]
+          env:
+          - name: APPLICATION_ENV
+            value: "main"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: address2map-service
+  namespace: address2map
+spec:
+  type: ClusterIP
+  selector:
+    app: address2map-app
+  ports:
+    - name: http
+      protocol: TCP
+      appProtocol: http
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: address2map-ingress-h1
+  namespace: address2map
+  annotations: 
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+  - hosts:
+    - address2map.h1.scholtz.sk
+    secretName: tls-beta1
+  rules:
+  - host: address2map.h1.scholtz.sk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: address2map-service
+            port:
+              number: 80
+
+              
+              
