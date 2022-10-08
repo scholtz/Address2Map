@@ -117,6 +117,31 @@
             Clear text
             </summary>
         </member>
+        <member name="T:Address2Map.Model.StreetNumberRule">
+            <summary>
+            Street number specification
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.StreetNumberRule.From">
+            <summary>
+            Street number - from
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.StreetNumberRule.To">
+            <summary>
+            Street number - to
+            </summary>
+        </member>
+        <member name="P:Address2Map.Model.StreetNumberRule.SeriesType">
+            <summary>
+            Street number series type
+            </summary>
+        </member>
+        <member name="T:Address2Map.Model.StreetNumberSeriesType">
+            <summary>
+            Street number series type (odd/even/all)
+            </summary>
+        </member>
         <member name="T:Address2Map.Model.Version">
             <summary>
             API version information
