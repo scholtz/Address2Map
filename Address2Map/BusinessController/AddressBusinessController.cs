@@ -104,7 +104,7 @@ namespace Address2Map.BusinessController
 
             var dataPoints = new List<DataPoint>();
 
-            if (line.StartsWith("!"))
+            if (line.Trim().StartsWith("!"))
             {
                 return (line, err, dataPoints);
             }
