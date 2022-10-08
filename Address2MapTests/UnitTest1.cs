@@ -1,4 +1,4 @@
-using Address2Map.BusinessController;
+ï»¿using Address2Map.BusinessController;
 using Address2Map.Repository;
 using Address2MapTests.NUnitTestCiscoService;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,10 +25,10 @@ namespace Address2MapTests
             var scope = web?.Services?.CreateScope();
             var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
             Assert.That(addrController, Is.Not.Null);
-            var input = @"Rašínovo nábø. - sudá è. 28-50";
+            var input = @"RaÅ¡Ã­novo nÃ¡bÅ™. - sudÃ¡ Ä. 28-50";
             var ret = addrController.ProcessText2Output(554782, input);
             Assert.That(ret.Input.Trim(), Is.EqualTo(input));
-            Assert.That(ret.Output.Trim(), Is.EqualTo("Rašínovo nábøeí - sudá è. 28-50"));
+            Assert.That(ret.Output.Trim(), Is.EqualTo("RaÅ¡Ã­novo nÃ¡bÅ™eÅ¾Ã­ - sudÃ¡ Ä. 28-50"));
             Assert.That(ret.Notes.Trim(), Is.EqualTo("We suggest to change street name"));
         }
         [Test]
@@ -39,10 +39,10 @@ namespace Address2MapTests
             Assert.That(addrController, Is.Not.Null);
             char chDash = '\u2013';
 
-            var input = @$"Zlatá ulièka u Daliborky {chDash} sudá è. 28–50";
+            var input = @$"ZlatÃ¡ uliÄka u Daliborky {chDash} sudÃ¡ Ä. 28â€“50";
             var ret = addrController.ProcessText2Output(554782, input);
             Assert.That(ret.Input.Trim(), Is.EqualTo(input));
-            Assert.That(ret.Output.Trim(), Is.EqualTo("Zlatá ulièka u Daliborky - sudá è. 28-50"));
+            Assert.That(ret.Output.Trim(), Is.EqualTo("ZlatÃ¡ uliÄka u Daliborky - sudÃ¡ Ä. 28-50"));
             Assert.That(ret.Notes.Trim(), Is.EqualTo("UTF Dash has been replaced with hyphen"));
         }
         [Test]
@@ -65,7 +65,7 @@ namespace Address2MapTests
             var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
             Assert.That(addrController, Is.Not.Null);
 
-            var input = @$"Zlatá ulièka u Daliborky";
+            var input = @$"ZlatÃ¡ uliÄka u Daliborky";
             var ret = addrController.ProcessText2DataPoints(554782, input);
             Assert.That(ret.Count(), Is.EqualTo(27));
         }
@@ -77,10 +77,10 @@ namespace Address2MapTests
             var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
             Assert.That(addrController, Is.Not.Null);
 
-            var input = @$"Zlatá ulièka u Daliborky - 123";
+            var input = @$"ZlatÃ¡ uliÄka u Daliborky - 123";
             var ret = addrController.ProcessText2Output(554782, input);
             Assert.That(ret.Input.Trim(), Is.EqualTo(input));
-            Assert.That(ret.Output.Trim(), Is.EqualTo("Zlatá ulièka u Daliborky - 123"));
+            Assert.That(ret.Output.Trim(), Is.EqualTo("ZlatÃ¡ uliÄka u Daliborky - 123"));
             Assert.That(ret.Notes.Trim(), Is.EqualTo("Format of the input is incorrect"));
         }
         [Test]
@@ -90,10 +90,10 @@ namespace Address2MapTests
             var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
             Assert.That(addrController, Is.Not.Null);
 
-            var input = @$"Zlatá ulièka u Daliborky - sudá è. 28-50";
+            var input = @$"ZlatÃ¡ uliÄka u Daliborky - sudÃ¡ Ä. 28-50";
             var ret = addrController.ProcessText2Output(554782, input);
             Assert.That(ret.Input.Trim(), Is.EqualTo(input));
-            Assert.That(ret.Output.Trim(), Is.EqualTo("Zlatá ulièka u Daliborky - sudá è. 28-50"));
+            Assert.That(ret.Output.Trim(), Is.EqualTo("ZlatÃ¡ uliÄka u Daliborky - sudÃ¡ Ä. 28-50"));
             Assert.That(ret.Notes.Trim(), Is.Empty);
         }
 #endif
