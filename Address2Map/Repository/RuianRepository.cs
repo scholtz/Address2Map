@@ -93,7 +93,7 @@ namespace Address2Map.Repository
                 if (dataPoint == null) continue;
                 var cityCode = uint.Parse(fields[ColCityCode]);
                 var admCode = uint.Parse(fields[ColAdmCode]);
-                if(fields[ColStreetName] == "Zlatá ulička u Daliborky")
+                if (fields[ColStreetName] == "Zlatá ulička u Daliborky")
                 {
 
                 }
@@ -193,7 +193,7 @@ namespace Address2Map.Repository
         internal IEnumerable<DataPoint> GetStreetDataPoints(uint streetCode, IEnumerable<StreetNumberRule> rules)
         {
             if (!street2DataPoint.ContainsKey(streetCode)) return Enumerable.Empty<DataPoint>();
-
+            if (rules == null) return street2DataPoint[streetCode].Values;
             var result = new List<DataPoint>();
 
             foreach (var rule in rules)
