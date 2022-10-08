@@ -138,7 +138,10 @@ namespace Address2Map.Repository
             ret.Lat = Convert.ToDecimal(wgs84.LatitudeDec);
             ret.Lng = Convert.ToDecimal(wgs84.LongitudeDec);
             ret.DescriptiveNumber = Int32.Parse(streetNum1);
-            ret.OrientationalNumber = Int32.Parse(NumberRegex.Match(streetNum2).Value);
+            if (int.TryParse(streetNum2, out var streetNum2Int))
+            {
+                ret.OrientationalNumber = streetNum2Int;
+            }
 
             return ret;
         }

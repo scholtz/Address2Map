@@ -1,5 +1,6 @@
 ﻿using Address2Map.Model;
 using Address2Map.Repository;
+using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -150,11 +151,11 @@ namespace Address2Map.BusinessController
                 if (!string.IsNullOrEmpty(err)) err += "; ";
                 err += $"We had trouble finding street {street}";
             }
-
+            IEnumerable<StreetNumberRule> rules = null;
             if (posEndStreet >= 0)
             {
                 var numberSpecification = line.Substring(posEndStreet + 2).Trim();
-                var rules = GetStreetNumberRules(numberSpecification);
+                rules = GetStreetNumberRules(numberSpecification);
             }
 
 

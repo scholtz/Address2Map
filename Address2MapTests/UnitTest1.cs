@@ -112,6 +112,19 @@ namespace Address2MapTests
             Assert.That(ret.Notes.Trim(), Is.Empty);
         }
         [Test]
+        public void ValidityPatterPassWithCommentsTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = $"!Comment\nZlatá ulička u Daliborky - sudá č. 28-50";
+            var ret = addrController.ProcessText2Output(554782, input);
+            Assert.That(ret.Notes.Trim(), Is.Empty);
+            Assert.That(ret.Output.Trim(), Is.EqualTo("!Comment\nZlatá ulička u Daliborky - sudá č. 28-50"));
+            Assert.That(ret.Input.Trim(), Is.EqualTo(input));
+        }
+        [Test]
         public void SimpleStreetNumberRuleTest()
         {
             var scope = web?.Services?.CreateScope();
