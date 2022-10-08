@@ -193,9 +193,9 @@ namespace Address2Map.Repository
         internal IEnumerable<DataPoint> GetStreetDataPoints(uint streetCode, IEnumerable<StreetNumberRule> rules)
         {
             if (!street2DataPoint.ContainsKey(streetCode)) return Enumerable.Empty<DataPoint>();
-            if (rules == null) return street2DataPoint[streetCode].Values;
+            if (rules?.Any() != true) return street2DataPoint[streetCode].Values;
             var result = new List<DataPoint>();
-
+            
             foreach (var rule in rules)
             {
                 IEnumerable<DataPoint> selection = street2DataPoint[streetCode].Values;
