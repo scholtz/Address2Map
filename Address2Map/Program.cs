@@ -38,13 +38,25 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("cors",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:5173",
+                                              "https://address2map.h1.scholtz.sk/",
+                                              "https://address2mapfe.h1.scholtz.sk/")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                      });
+});
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
+app.UseCors("cors");
 
 var repo = app.Services.GetService<RuianRepository>();
 repo?.ProcessCSV(File.ReadAllBytes("Data/20220930_OB_554782_ADR.csv"));
