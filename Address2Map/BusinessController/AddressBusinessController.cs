@@ -52,11 +52,11 @@ namespace Address2Map.BusinessController
         /// <param name="city"></param>
         /// <param name="line"></param>
         /// <returns></returns>
-        public (string outStr, string noteStr) ProcessLine(uint city,string line)
+        public (string outStr, string noteStr) ProcessLine(uint city, string line)
         {
             var err = "";
 
-            
+
             if (_dashRegex.IsMatch(line))
             {
                 err += "UTF Dash has been replaced with hyphen";
@@ -67,18 +67,22 @@ namespace Address2Map.BusinessController
             var street = line;
             if (posEndStreet >= 0)
             {
-                street = line.Substring(0, posEndStreet); 
+                street = line.Substring(0, posEndStreet);
             }
 
             // check if street is valid
             var suggestion = ruianRepository.SuggestStreet(city, street);
-            if(suggestion != null && suggestion != street)
+            if (suggestion != null && suggestion != street)
             {
                 if (!string.IsNullOrEmpty(err)) err += "; ";
                 err += "We suggest to change street name";
                 line = line.Replace(street, suggestion);
             }
-            
+            if (suggestion == null)
+            {
+                err += $"We had trouble finding street {street}";
+            }
+
 
             return (line, err);
         }

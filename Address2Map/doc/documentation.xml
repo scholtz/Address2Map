@@ -9,6 +9,12 @@
             Business logic of the address controller
             </summary>
         </member>
+        <member name="M:Address2Map.BusinessController.AddressBusinessController.#ctor(Address2Map.Repository.RuianRepository)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="ruianRepository"></param>
+        </member>
         <member name="M:Address2Map.BusinessController.AddressBusinessController.ProcessText2Output(System.UInt32,System.String)">
             <summary>
             Convert text 2 output
@@ -23,6 +29,18 @@
             <param name="line"></param>
             <returns></returns>
         </member>
+        <member name="T:Address2Map.Controllers.AddressController">
+            <summary>
+            Public address controller
+            </summary>
+        </member>
+        <member name="M:Address2Map.Controllers.AddressController.#ctor(Microsoft.Extensions.Logging.ILogger{Address2Map.Controllers.AddressController},Address2Map.BusinessController.AddressBusinessController)">
+            <summary>
+            constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="addressBusinessController"></param>
+        </member>
         <member name="M:Address2Map.Controllers.AddressController.AutocompleteCity(System.String)">
             <summary>
             Autocomplete city
@@ -35,7 +53,15 @@
             Autocomplete street for specific city
             </summary>
             <param name="cityCode"></param>
-            <param name="cityName"></param>
+            <param name="streetName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Address2Map.Controllers.AddressController.CheckAddresses(System.UInt32,System.String)">
+            <summary>
+            Check the addresses
+            </summary>
+            <param name="cityCode"></param>
+            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="T:Address2Map.Controllers.VersionController">
