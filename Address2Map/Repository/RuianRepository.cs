@@ -137,7 +137,10 @@ namespace Address2Map.Repository
             var wgs84 = new JTSK2065Coordinate(Convert.ToDouble(x), Convert.ToDouble(y)).WGS84Coordinate;
             ret.Lat = Convert.ToDecimal(wgs84.LatitudeDec);
             ret.Lng = Convert.ToDecimal(wgs84.LongitudeDec);
-            ret.DescriptiveNumber = Int32.Parse(streetNum1);
+            if (int.TryParse(streetNum1, out var streetNum1Int))
+            {
+                ret.DescriptiveNumber = streetNum1Int;
+            }
             if (int.TryParse(streetNum2, out var streetNum2Int))
             {
                 ret.OrientationalNumber = streetNum2Int;
