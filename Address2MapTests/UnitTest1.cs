@@ -1,4 +1,5 @@
 ﻿using Address2Map.BusinessController;
+using Address2Map.Model;
 using Address2Map.Repository;
 using Address2MapTests.NUnitTestCiscoService;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,7 +70,7 @@ namespace Address2MapTests
             var ret = addrController.ProcessText2DataPoints(554782, input);
             Assert.That(ret.Count(), Is.EqualTo(27));
         }
-#if REGEXWorks
+
         [Test]
         public void ValidityPatterFailTest()
         {
@@ -96,6 +97,112 @@ namespace Address2MapTests
             Assert.That(ret.Output.Trim(), Is.EqualTo("Zlatá ulička u Daliborky - sudá č. 28-50"));
             Assert.That(ret.Notes.Trim(), Is.Empty);
         }
-#endif
+        [Test]
+        public void SimpleStreetNumberRuleTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"sudá č.";
+            var ret = addrController.GetStreetNumberRules(input);
+            var rules = new List<StreetNumberRule>()
+            {
+                new StreetNumberRule{ From = 0, To = 10000, SeriesType = StreetNumberSeriesType.Even }
+            };
+            CollectionAssert.AreEqual(rules, ret);
+        }
+        [Test]
+        public void SimpleStreetNumberRuleWithRangeTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"sudá č. 28-50";
+            var ret = addrController.GetStreetNumberRules(input);
+            var rules = new List<StreetNumberRule>()
+            {
+                new StreetNumberRule{ From = 28, To = 50, SeriesType = StreetNumberSeriesType.Even }
+            };
+            CollectionAssert.AreEqual(rules, ret);
+        }
+
+        [Test]
+        public void OneStreetNumberRuleMultipleRangesTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"č. 28-50, 58, 60 - 62";
+            var ret = addrController.GetStreetNumberRules(input);
+            var rules = new List<StreetNumberRule>()
+            {
+                new StreetNumberRule{ From = 28, To = 50, SeriesType = StreetNumberSeriesType.All },
+                new StreetNumberRule{ From = 58, To = 58, SeriesType = StreetNumberSeriesType.All },
+                new StreetNumberRule{ From = 60, To = 62, SeriesType = StreetNumberSeriesType.All }
+            };
+            CollectionAssert.AreEqual(rules, ret);
+        }
+
+        [Test]
+        public void MultipleStreetNumberRuleTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"sudá č. 28-50, lichá č.";
+            var ret = addrController.GetStreetNumberRules(input);
+            var rules = new List<StreetNumberRule>()
+            {
+                new StreetNumberRule{ From = 28, To = 50, SeriesType = StreetNumberSeriesType.Even },
+                new StreetNumberRule{ SeriesType = StreetNumberSeriesType.Odd }
+            };
+            CollectionAssert.AreEqual(rules, ret);
+        }
+
+        [Test]
+        public void MultipleStreetNumberRuleMultipleRangesTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"sudá č. 28-50, 60 - 80, lichá č. 15-17, 21, 25-35, č. p. 255, 608-704, 870";
+            var ret = addrController.GetStreetNumberRules(input);
+            var rules = new List<StreetNumberRule>()
+            {
+                new StreetNumberRule{ From = 28, To = 50, SeriesType = StreetNumberSeriesType.Even },
+                new StreetNumberRule{ From = 60, To = 80, SeriesType = StreetNumberSeriesType.Even },
+                new StreetNumberRule{ From = 15, To = 17, SeriesType = StreetNumberSeriesType.Odd },
+                new StreetNumberRule{ From = 21, To = 21, SeriesType = StreetNumberSeriesType.Odd },
+                new StreetNumberRule{ From = 25, To = 35, SeriesType = StreetNumberSeriesType.Odd },
+                new StreetNumberRule{ From = 255, To = 255, SeriesType = StreetNumberSeriesType.CP },
+                new StreetNumberRule{ From = 608, To = 704, SeriesType = StreetNumberSeriesType.CP },
+                new StreetNumberRule{ From = 870, To = 870, SeriesType = StreetNumberSeriesType.CP },
+            };
+            CollectionAssert.AreEqual(rules, ret);
+        }
+
+        [Test]
+        public void StreetNumberRuleNoUpperBoundRangesTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"sudá č. od 28 výše, lichá č. 7 a výše, č. od 5 a výše, č. p. 700 výše";
+            var ret = addrController.GetStreetNumberRules(input);
+            var rules = new List<StreetNumberRule>()
+            {
+                new StreetNumberRule{ From = 28, SeriesType = StreetNumberSeriesType.Even },
+                new StreetNumberRule{ From = 7, SeriesType = StreetNumberSeriesType.Odd },
+                new StreetNumberRule{ From = 5, SeriesType = StreetNumberSeriesType.All },
+                new StreetNumberRule{ From = 700, SeriesType = StreetNumberSeriesType.CP }
+            };
+            CollectionAssert.AreEqual(rules, ret);
+        }
     }
 }
