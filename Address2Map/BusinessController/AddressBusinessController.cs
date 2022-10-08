@@ -13,7 +13,10 @@ namespace Address2Map.BusinessController
         private readonly RuianRepository ruianRepository;
         private const string DashPattern = @"[\u2012\u2013\u2014\u2015]";
         private static Regex _dashRegex = new Regex(DashPattern);
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="ruianRepository"></param>
         public AddressBusinessController(RuianRepository ruianRepository)
         {
             this.ruianRepository = ruianRepository;
