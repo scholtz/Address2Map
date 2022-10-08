@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Address2Map.Repository
 {
@@ -16,6 +17,7 @@ namespace Address2Map.Repository
         ConcurrentDictionary<uint, ConcurrentDictionary<uint, Street>> cityCode2Streets = new ConcurrentDictionary<uint, ConcurrentDictionary<uint, Street>>();
         ConcurrentDictionary<uint, ConcurrentDictionary<uint, DataPoint>> street2DataPoint = new ConcurrentDictionary<uint, ConcurrentDictionary<uint, DataPoint>>();
         private readonly SlugHelper slugHelper;
+        private static Regex NumberRegex = new Regex(@"\d+");
         /// <summary>
         /// Constructor
         /// </summary>
@@ -135,6 +137,8 @@ namespace Address2Map.Repository
             var wgs84 = new JTSK2065Coordinate(Convert.ToDouble(x), Convert.ToDouble(y)).WGS84Coordinate;
             ret.Lat = Convert.ToDecimal(wgs84.LatitudeDec);
             ret.Lng = Convert.ToDecimal(wgs84.LongitudeDec);
+            ret.DescriptiveNumber = Int32.Parse(streetNum1);
+            ret.OrientationalNumber = Int32.Parse(NumberRegex.Match(streetNum2).Value);
 
             return ret;
         }
@@ -180,11 +184,45 @@ namespace Address2Map.Repository
             return cityCode2Streets[cityCode].Values.Where(c => c.Slug.StartsWith(streetName)).OrderBy(k => k.Name);
         }
 
-        internal IEnumerable<DataPoint> GetStreetDataPoints(uint streetCode)
+        internal IEnumerable<DataPoint> GetStreetDataPoints(uint streetCode, IEnumerable<StreetNumberRule> rules)
         {
             if (!street2DataPoint.ContainsKey(streetCode)) return Enumerable.Empty<DataPoint>();
-            // todo add filter by 
-            return street2DataPoint[streetCode].Values;
+
+            var result = new List<DataPoint>();
+
+            foreach (var rule in rules)
+            {
+                IEnumerable<DataPoint> selection = street2DataPoint[streetCode].Values;
+
+                if (rule.SeriesType == StreetNumberSeriesType.CP)
+                {
+                    selection = selection.Where(
+                        x => x.DescriptiveNumber >= rule.From && x.DescriptiveNumber <= rule.To
+                    );
+                }
+                else
+                {
+                    selection = selection.Where(
+                        x => x.OrientationalNumber >= rule.From && x.OrientationalNumber <= rule.To
+                    );
+                    if (rule.SeriesType == StreetNumberSeriesType.Even)
+                    {
+                        selection = selection.Where(
+                            x => x.OrientationalNumber % 2 == 0
+                        );
+                    }
+                    else if (rule.SeriesType == StreetNumberSeriesType.Odd)
+                    {
+                        selection = selection.Where(
+                            x => x.OrientationalNumber % 2 == 1
+                        );
+                    }
+                }
+
+                result.AddRange(selection);
+            }
+
+            return result;
         }
     }
 }

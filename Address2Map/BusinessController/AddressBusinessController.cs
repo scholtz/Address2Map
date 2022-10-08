@@ -153,7 +153,7 @@ namespace Address2Map.BusinessController
             {
                 if (processDataPoints)
                 {
-                    dataPoints.AddRange(ruianRepository.GetStreetDataPoints(suggestion.Code));
+                    dataPoints.AddRange(ruianRepository.GetStreetDataPoints(suggestion.Code, rules));
                 }
             }
 
