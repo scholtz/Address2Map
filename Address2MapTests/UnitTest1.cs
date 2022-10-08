@@ -58,5 +58,33 @@ namespace Address2MapTests
             Assert.That(ret.Output.Trim(), Is.EqualTo("DoesNotExists"));
             Assert.That(ret.Notes.Trim(), Is.EqualTo("We had trouble finding street DoesNotExists"));
         }
+#if REGEXWorks
+        [Test]
+        public void ValidityPatterFailTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"Zlatá ulièka u Daliborky - 123";
+            var ret = addrController.ProcessText2Output(554782, input);
+            Assert.That(ret.Input.Trim(), Is.EqualTo(input));
+            Assert.That(ret.Output.Trim(), Is.EqualTo("Zlatá ulièka u Daliborky - 123"));
+            Assert.That(ret.Notes.Trim(), Is.EqualTo("Format of the input is incorrect"));
+        }
+        [Test]
+        public void ValidityPatterPassTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"Zlatá ulièka u Daliborky - sudá è. 28-50";
+            var ret = addrController.ProcessText2Output(554782, input);
+            Assert.That(ret.Input.Trim(), Is.EqualTo(input));
+            Assert.That(ret.Output.Trim(), Is.EqualTo("Zlatá ulièka u Daliborky - sudá è. 28-50"));
+            Assert.That(ret.Notes.Trim(), Is.Empty);
+        }
+#endif
     }
 }

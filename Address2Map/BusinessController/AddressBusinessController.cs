@@ -13,6 +13,8 @@ namespace Address2Map.BusinessController
         private readonly RuianRepository ruianRepository;
         private const string DashPattern = @"[\u2012\u2013\u2014\u2015]";
         private static Regex _dashRegex = new Regex(DashPattern);
+        private const string ValidityPattern = @"^([^-]+?)( - (lichá č.|sudá č.|č.|č. p.)( (\d+ ?[–-] ?\d+|(od )?\d+( a)? výše|\d+)((, ?| ?a ?)(\d+ ?[–-] ?\d+|(od )?\d+( a)? výše|\d+))*)?((, ?| ?a ?)(lichá č.|sudá č.|č.|č. p.)( (\d+ ?[–-] ?\d+|(od )?\d+( a)? výše|\d+)((, ?| ?a ?)(\d+ ?[–-] ?\d+|(od )?\d+( a)? výše|\d+))*)?)*)?$";
+        private static Regex ValidityPatternRegex = new Regex(ValidityPattern);
         /// <summary>
         /// Constructor
         /// </summary>
@@ -62,6 +64,13 @@ namespace Address2Map.BusinessController
                 err += "UTF Dash has been replaced with hyphen";
                 line = _dashRegex.Replace(line, "-");
             }
+#if REGEXWorks
+            if (!ValidityPatternRegex.IsMatch(line))
+            {
+                if (!string.IsNullOrEmpty(err)) err += "; ";
+                err += $"Format of the input is incorrect";
+            }
+#endif
 
             var posEndStreet = line.IndexOf(" -");
             var street = line;
@@ -80,6 +89,7 @@ namespace Address2Map.BusinessController
             }
             if (suggestion == null)
             {
+                if (!string.IsNullOrEmpty(err)) err += "; ";
                 err += $"We had trouble finding street {street}";
             }
 

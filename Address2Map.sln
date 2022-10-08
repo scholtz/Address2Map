@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Address2Map", "Address2Map\Address2Map.csproj", "{F721352E-8815-4E98-809B-2AB04C2568B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Address2MapTests", "Address2MapTests\Address2MapTests.csproj", "{CD5C19DB-54C1-4E66-989B-CD371733ED47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Address2MapTests", "Address2MapTests\Address2MapTests.csproj", "{CD5C19DB-54C1-4E66-989B-CD371733ED47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JTSK-S42-WGS84-Krovak-GPS", "JTSK-S42-WGS84-Krovak-GPS\JTSK-S42-WGS84-Krovak-GPS.csproj", "{61B67615-CF7E-45F8-BCB5-41B4029AA2E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CD5C19DB-54C1-4E66-989B-CD371733ED47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD5C19DB-54C1-4E66-989B-CD371733ED47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD5C19DB-54C1-4E66-989B-CD371733ED47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B67615-CF7E-45F8-BCB5-41B4029AA2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B67615-CF7E-45F8-BCB5-41B4029AA2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B67615-CF7E-45F8-BCB5-41B4029AA2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B67615-CF7E-45F8-BCB5-41B4029AA2E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
