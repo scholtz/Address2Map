@@ -44,8 +44,8 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("http://localhost:5173",
-                                              "https://address2map.h1.scholtz.sk/",
-                                              "https://address2mapfe.h1.scholtz.sk/")
+                                              "https://address2map.h1.scholtz.sk",
+                                              "https://address2mapfe.h1.scholtz.sk")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
