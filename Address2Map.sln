@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Address2Map", "Address2Map\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Address2MapTests", "Address2MapTests\Address2MapTests.csproj", "{CD5C19DB-54C1-4E66-989B-CD371733ED47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JTSK-S42-WGS84-Krovak-GPS", "JTSK-S42-WGS84-Krovak-GPS\JTSK-S42-WGS84-Krovak-GPS.csproj", "{61B67615-CF7E-45F8-BCB5-41B4029AA2E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JTSK-S42-WGS84-Krovak-GPS", "JTSK-S42-WGS84-Krovak-GPS\JTSK-S42-WGS84-Krovak-GPS.csproj", "{61B67615-CF7E-45F8-BCB5-41B4029AA2E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D48EA840-A000-4002-9E1E-1098FE0B9CB2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
