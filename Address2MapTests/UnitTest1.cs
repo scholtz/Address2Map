@@ -68,7 +68,21 @@ namespace Address2MapTests
 
             var input = @$"Zlatá ulička u Daliborky";
             var ret = addrController.ProcessText2DataPoints(554782, input);
-            Assert.That(ret.Count(), Is.EqualTo(27));
+            Assert.That(ret.SelectMany(i => i).Count(), Is.EqualTo(27));
+            Assert.That(ret.Count(), Is.EqualTo(1));
+        }
+        [Test]
+        public void CalculateDataPointsTwoAreasTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = $"!Area1\nZlatá ulička u Daliborky\n!Area2\nZlatá ulička u Daliborky\n";
+            var ret = addrController.ProcessText2DataPoints(554782, input);
+            Assert.That(ret.Count(), Is.EqualTo(2));
+            Assert.That(ret.First().Count(), Is.EqualTo(27));
+            Assert.That(ret.Last().Count(), Is.EqualTo(27));
         }
 
         [Test]

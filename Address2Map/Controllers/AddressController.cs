@@ -98,7 +98,7 @@ namespace Address2Map.Controllers
         [HttpPost("AddressesDataPoints/{cityCode}")]
         [ProducesResponseType(200, Type = typeof(TextConversion))]
         [ProducesResponseType(400)]
-        public ActionResult<IEnumerable<DataPoint>> AddressesDataPoints([FromRoute] uint cityCode, [FromForm] string input)
+        public ActionResult<IEnumerable<IEnumerable<DataPoint>>> AddressesDataPoints([FromRoute] uint cityCode, [FromForm] string input)
         {
             try
             {

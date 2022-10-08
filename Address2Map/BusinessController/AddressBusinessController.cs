@@ -64,16 +64,29 @@ namespace Address2Map.BusinessController
         /// Convert text 2 output
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DataPoint> ProcessText2DataPoints(uint city, string input)
+        public IEnumerable<IEnumerable<DataPoint>> ProcessText2DataPoints(uint city, string input)
         {
-            var ret = new List<DataPoint>();
+            var ret = new List<List<DataPoint>>();
+            var currentList = new List<DataPoint>();
             foreach (var item in input.Split('\n'))
             {
+                if (item.StartsWith("!"))
+                {
+                    if(currentList.Count > 0)
+                    {
+                        ret.Add(currentList);
+                        currentList = new List<DataPoint>();
+                    }
+                }
                 (var outStr, var noteStr, var dataPoints) = ProcessLine(city, item.Trim(), true);
                 if (dataPoints?.Any() == true)
                 {
-                    ret.AddRange(dataPoints);
+                    currentList.AddRange(dataPoints);
                 }
+            }
+            if (currentList.Count > 0)
+            {
+                ret.Add(currentList);
             }
 
             return ret;
