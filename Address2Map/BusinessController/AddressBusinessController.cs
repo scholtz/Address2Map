@@ -104,6 +104,15 @@ namespace Address2Map.BusinessController
 
             var dataPoints = new List<DataPoint>();
 
+            if (line.StartsWith("!"))
+            {
+                return (line, err, dataPoints);
+            }
+            if (string.IsNullOrEmpty(line))
+            {
+                return (line, err, dataPoints);
+            }
+
             if (_dashRegex.IsMatch(line))
             {
                 err += "UTF Dash has been replaced with hyphen";
