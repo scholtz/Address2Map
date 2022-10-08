@@ -58,6 +58,17 @@ namespace Address2MapTests
             Assert.That(ret.Output.Trim(), Is.EqualTo("DoesNotExists"));
             Assert.That(ret.Notes.Trim(), Is.EqualTo("We had trouble finding street DoesNotExists"));
         }
+        [Test]
+        public void CalculateDataPointsTest()
+        {
+            var scope = web?.Services?.CreateScope();
+            var addrController = scope?.ServiceProvider?.GetService(typeof(AddressBusinessController)) as AddressBusinessController;
+            Assert.That(addrController, Is.Not.Null);
+
+            var input = @$"Zlatá ulièka u Daliborky";
+            var ret = addrController.ProcessText2DataPoints(554782, input);
+            Assert.That(ret.Count(), Is.EqualTo(27));
+        }
 #if REGEXWorks
         [Test]
         public void ValidityPatterFailTest()

@@ -35,7 +35,7 @@ namespace Address2Map.BusinessController
 
             foreach (var item in input.Split('\n'))
             {
-                (var outStr, var noteStr) = ProcessLine(city, item.Trim());
+                (var outStr, var noteStr, var dataPoints) = ProcessLine(city, item.Trim(), false);
                 instr.AppendLine(item);
                 outstr.AppendLine(outStr);
                 notestr.AppendLine(noteStr);
@@ -49,15 +49,35 @@ namespace Address2Map.BusinessController
             };
         }
         /// <summary>
+        /// Convert text 2 output
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DataPoint> ProcessText2DataPoints(uint city, string input)
+        {
+            var ret = new List<DataPoint>();
+            foreach (var item in input.Split('\n'))
+            {
+                (var outStr, var noteStr, var dataPoints) = ProcessLine(city, item.Trim(), true);
+                if (dataPoints?.Any() == true)
+                {
+                    ret.AddRange(dataPoints);
+                }
+            }
+
+            return ret;
+        }
+        /// <summary>
         /// Process line in input with the processing rules
         /// </summary>
         /// <param name="city"></param>
         /// <param name="line"></param>
+        /// <param name="processDataPoints"></param>
         /// <returns></returns>
-        public (string outStr, string noteStr) ProcessLine(uint city, string line)
+        public (string outStr, string noteStr, IEnumerable<DataPoint> dataPoints) ProcessLine(uint city, string line, bool processDataPoints)
         {
             var err = "";
 
+            var dataPoints = new List<DataPoint>();
 
             if (_dashRegex.IsMatch(line))
             {
@@ -81,11 +101,11 @@ namespace Address2Map.BusinessController
 
             // check if street is valid
             var suggestion = ruianRepository.SuggestStreet(city, street);
-            if (suggestion != null && suggestion != street)
+            if (suggestion != null && suggestion.Name != street)
             {
                 if (!string.IsNullOrEmpty(err)) err += "; ";
                 err += "We suggest to change street name";
-                line = line.Replace(street, suggestion);
+                line = line.Replace(street, suggestion.Name);
             }
             if (suggestion == null)
             {
@@ -93,8 +113,15 @@ namespace Address2Map.BusinessController
                 err += $"We had trouble finding street {street}";
             }
 
+            if (suggestion?.Name == street)
+            {
+                if (processDataPoints)
+                {
+                    dataPoints.AddRange(ruianRepository.GetStreetDataPoints(suggestion.Code));
+                }
+            }
 
-            return (line, err);
+            return (line, err, dataPoints);
         }
 
         internal IEnumerable<Model.City> AutocompleteCity(string cityName)

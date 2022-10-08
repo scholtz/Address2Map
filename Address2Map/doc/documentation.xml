@@ -21,12 +21,19 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Address2Map.BusinessController.AddressBusinessController.ProcessLine(System.UInt32,System.String)">
+        <member name="M:Address2Map.BusinessController.AddressBusinessController.ProcessText2DataPoints(System.UInt32,System.String)">
+            <summary>
+            Convert text 2 output
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Address2Map.BusinessController.AddressBusinessController.ProcessLine(System.UInt32,System.String,System.Boolean)">
             <summary>
             Process line in input with the processing rules
             </summary>
             <param name="city"></param>
             <param name="line"></param>
+            <param name="processDataPoints"></param>
             <returns></returns>
         </member>
         <member name="T:Address2Map.Controllers.AddressController">
@@ -57,6 +64,14 @@
             <returns></returns>
         </member>
         <member name="M:Address2Map.Controllers.AddressController.CheckAddresses(System.UInt32,System.String)">
+            <summary>
+            Check the addresses
+            </summary>
+            <param name="cityCode"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Address2Map.Controllers.AddressController.AddressesDataPoints(System.UInt32,System.String)">
             <summary>
             Check the addresses
             </summary>

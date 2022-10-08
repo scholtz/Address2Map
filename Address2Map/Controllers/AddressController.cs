@@ -89,5 +89,25 @@ namespace Address2Map.Controllers
             }
 
         }
+        /// <summary>
+        /// Check the addresses
+        /// </summary>
+        /// <param name="cityCode"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("AddressesDataPoints/{cityCode}")]
+        [ProducesResponseType(200, Type = typeof(TextConversion))]
+        [ProducesResponseType(400)]
+        public ActionResult<IEnumerable<DataPoint>> AddressesDataPoints([FromRoute] uint cityCode, [FromForm] string input)
+        {
+            try
+            {
+                return Ok(addressBusinessController.ProcessText2DataPoints(cityCode, input));
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
+            }
+        }
     }
 }
