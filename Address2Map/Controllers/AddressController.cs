@@ -77,7 +77,7 @@ namespace Address2Map.Controllers
         [HttpPost("CheckAddresses/{cityCode}")]
         [ProducesResponseType(200, Type = typeof(TextConversion))]
         [ProducesResponseType(400)]
-        public ActionResult<TextConversion> CheckAddresses([FromRoute] uint cityCode, [FromBody] string input)
+        public ActionResult<TextConversion> CheckAddresses([FromRoute] uint cityCode, [FromForm] string input)
         {
             try
             {
